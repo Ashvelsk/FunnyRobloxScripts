@@ -1,0 +1,36 @@
+_G.HeadSize = 8
+_G.Disabled = true
+
+local Allplayers = game:GetService("Players"):GetPlayers()
+function bigheads()
+	game:GetService('RunService').RenderStepped:connect(function()
+		for i,v:Player in next, Allplayers do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				v.CharacterAdded:Connect(function()
+					pcall(function()
+						local char = v.Character
+						Instance.new("Highlight").Parent = char
+						char.Head.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+						char.Head.Transparency = 0.5
+						char.Head.BrickColor = BrickColor.new("Red")
+						char.Head.Material = "Neon"
+						char.Head.CanCollide = false
+						char.Head.Massless = true
+					end)
+				end)
+			end	
+		end
+	end)
+end
+
+
+game:GetService("RunService").RenderStepped:Connect(function()
+	game:GetService("Players").PlayerAdded:Connect(function(pla)
+		table.insert(Allplayers,pla)
+		bigheads()
+	end)
+end)
+
+game:GetService("Players").PlayerRemoving:Connect(function(plr)
+	table.remove(Allplayers,table.find(plr)) 
+end)
