@@ -1,14 +1,28 @@
-for _,v in game:GetService("Players"):GetPlayers() do
-	v.CharacterAdded:Connect(function(char)
-		print(char)
-		Instance.new("Highlight").Parent = char
-		char.Head.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
-		char.Head.Transparency = 0.5
-		char.Head.BrickColor = BrickColor.new("Red")
-		char.Head.Material = "Neon"
-		char.Head.CanCollide = false
-		char.Head.Massless = true
+_G.HeadSize = 8
+
+function bighead(v:Model)
+	game:GetService('RunService').RenderStepped:connect(function()
+					pcall(function()
+						v.Head.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+						v.Head.Transparency = 0.5
+						v.Head.BrickColor = BrickColor.new("Red")
+						v.Head.Material = "Neon"
+						v.Head.CanCollide = false
+						v.Head.Massless = true
+					end)	
 	end)
+end
+
+for _,v in game:GetService("Players"):GetPlayers() do
+	if v.Name ~= game:GetService("Players").LocalPlayer.Name then
+		local char = v.Character
+		Instance.new("Highlight").Parent = char
+		bighead(char)
+		v.CharacterAdded:Connect(function(char)
+			Instance.new("Highlight").Parent = char
+			bighead(char)
+		end) 
+	end	
 end
 
 
@@ -17,11 +31,6 @@ game:GetService("Players").PlayerAdded:Connect(function(pla)
 	pla.CharacterAdded:Connect(function(char)
 		print(char)
 		Instance.new("Highlight").Parent = char
-		char.Head.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
-		char.Head.Transparency = 0.5
-		char.Head.BrickColor = BrickColor.new("Red")
-		char.Head.Material = "Neon"
-		char.Head.CanCollide = false
-		char.Head.Massless = true
+		bighead(char)
 	end)
 end)
